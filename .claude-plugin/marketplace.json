@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "korean-asa",
+  "description": "성취평가제(ASA) 교사 지원 스킬 마켓플레이스. 교과 중립 엔진 + 교과 팩 구조로, 포크해서 다른 교과 버전을 만들 수 있다.",
+  "owner": {
+    "name": "junil"
+  },
+  "plugins": [
+    {
+      "name": "korean-asa",
+      "version": "0.1.0",
+      "description": "2022 개정 교육과정 성취평가제 교사 지원 스킬. 평가 준거 설정 → 성취수준별 문항 개발 → 결과 분석의 사슬을 성취기준 코드 하나로 잇는다. 국어과 공통 2과목 + 선택 9과목 성취수준 내장.",
+      "source": "./",
+      "category": "education",
+      "tags": ["korean", "teacher", "assessment", "achievement-standards", "high-school-credit-system"]
+    }
+  ],
+  "version": "0.1.0"
+}

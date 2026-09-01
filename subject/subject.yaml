@@ -1,0 +1,290 @@
+# =============================================================================
+#  교과 팩 계약 (Subject Pack Contract)
+# =============================================================================
+#  이 파일은 asa-skills 엔진이 교과를 인식하는 유일한 진입점이다.
+#  다른 교과로 포크할 때는 이 파일과 같은 디렉터리의 문서 3종만 교체하면 되며,
+#  core/ 와 skills/ 는 절대 수정하지 않는다.  →  FORKING.md 참조
+#
+#  스키마 검증:  python scripts/validate_subject.py
+# =============================================================================
+
+schema_version: 1
+
+subject:
+  id: korean
+  name_ko: 국어과
+  name_en: Korean Language Arts
+  curriculum: 2022 개정 교육과정
+  school_level: 고등학교
+
+# -----------------------------------------------------------------------------
+# 1. 성취기준 코드 체계
+#    포크 시 반드시 교체. 엔진은 이 정규식으로 성취기준 코드를 파싱·검증한다.
+# -----------------------------------------------------------------------------
+standard_code:
+  # ★ 공통과목과 선택과목의 하이픈 위치가 다르다. 하나의 정규식으로 둘 다 받는다.
+  #
+  #   공통과목  [10공국1-01-01]  →  band=10  course=공국1  area=01  serial=01   (하이픈 2개)
+  #   선택과목  [12화언01-03]    →  band=12  course=화언   area=01  serial=03   (하이픈 1개)
+  #
+  #   선택과목은 과목 토큰과 영역 번호가 붙어 있다. 영역이 01 하나뿐이기 때문이다.
+  pattern: '^\[(?P<band>\d{2})(?P<course>[가-힣]+\d?)-?(?P<area>\d{2})-(?P<serial>\d{2})\]$'
+  examples:
+    - '[10공국1-01-01]'
+    - '[10공국2-06-02]'
+    - '[12화언01-03]'
+    - '[12언탐01-05]'
+  parts:
+    band:   학교급·학년 표시 (10=고1 공통과목, 12=고2~3 선택과목)
+    course: 과목 약칭 토큰 (아래 courses[].code_token 과 일치)
+    area:   영역 순번
+    serial: 영역 내 성취기준 순번
+
+# -----------------------------------------------------------------------------
+# 2. 과목 목록
+#    level_system   : 성취수준 진술 체계. KICE 보급본에서 직접 확인함(11과목 전부 5수준).
+#    grading_scale  : 성취도 평정 단계. 학교생활기록부 기재요령 기준.
+#    has_area_levels: 영역별 성취수준 개발 여부.
+#                     ★ 공통과목만 true. 선택과목 9종은 성취기준별 성취수준만 존재하므로
+#                       학기 단위 성취수준을 성취기준별 성취수준만으로 구성해야 한다.
+# -----------------------------------------------------------------------------
+courses:
+  # ── 공통과목 ────────────────────────────────────────────────────────────
+  - id: gongguk1
+    code_token: 공국1
+    code_example: '[10공국1-01-01]'
+    name: 공통국어1
+    type: common
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: true
+    areas:
+      "01": 듣기·말하기
+      "02": 읽기
+      "03": 쓰기
+      "04": 문법
+      "05": 문학
+      "06": 매체
+
+  - id: gongguk2
+    code_token: 공국2
+    code_example: '[10공국2-06-02]'
+    name: 공통국어2
+    type: common
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: true
+    areas:
+      "01": 듣기·말하기
+      "02": 읽기
+      "03": 쓰기
+      "04": 문법
+      "05": 문학
+      "06": 매체
+
+  # ── 일반선택 ────────────────────────────────────────────────────────────
+  - id: hwaeon
+    code_token: 화언
+    code_example: '[12화언01-03]'
+    name: 화법과 언어
+    type: general_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null          # 2단계 파싱에서 확정
+
+  - id: dokjak
+    code_token: 독작
+    code_example: '[12독작01-02]'
+    name: 독서와 작문
+    type: general_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  - id: munhak
+    code_token: 문학
+    code_example: '[12문학01-02]'
+    name: 문학
+    type: general_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  # ── 진로선택 ────────────────────────────────────────────────────────────
+  - id: jutam
+    code_token: 주탐
+    code_example: '[12주탐01-03]'
+    name: 주제 탐구 독서
+    type: career_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  - id: munyeong
+    code_token: 문영
+    code_example: '[12문영01-02]'
+    name: 문학과 영상
+    type: career_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  - id: jikui
+    code_token: 직의
+    code_example: '[12직의01-02]'
+    name: 직무 의사소통
+    type: career_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  # ── 융합선택 ────────────────────────────────────────────────────────────
+  #  ✔ 확인 완료: 국어 교과(군)는 융합선택 포함 전체 과목이 성취도 5단계(A~E)다.
+  #     3단계는 체육·예술 교과(군)와 공통과목 과학탐구실험만 해당한다.
+  #     석차등급 미산출 예외는 '사회·과학 교과(군) 융합선택 9과목'뿐이므로
+  #     국어과 융합선택은 석차등급 5등급을 산출한다.
+  #     근거: 2025학년도 고등학교 학업성적관리 시행지침 — 교과별 성취도 산출 방식
+  - id: dokto
+    code_token: 독토
+    code_example: '[12독토01-02]'
+    name: 독서 토론과 글쓰기
+    type: fusion_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  - id: maeui
+    code_token: 매의
+    code_example: '[12매의01-02]'
+    name: 매체 의사소통
+    type: fusion_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+  - id: eontam
+    code_token: 언탐
+    code_example: '[12언탐01-05]'
+    name: 언어생활 탐구
+    type: fusion_elective
+    level_system: 5
+    grading_scale: 5
+    rank_grade: 5        # 석차등급 산출 단계 (미산출이면 null)
+    has_area_levels: false
+    areas: null
+
+# -----------------------------------------------------------------------------
+# 3. 시도교육청 지침
+#    교과와 독립된 축이다. 다른 시도로 옮길 때는 이 블록만 교체한다.
+# -----------------------------------------------------------------------------
+jurisdiction:
+  id: gyeonggi
+  name: 경기도교육청
+  source: 경기도 학업성적관리 시행지침
+  rules:
+    selected_response_choices: 5      # '선택형'은 오지선다로 출제
+    constructed_response_types: [논술형]  # '서답형'은 논술형만 사용 (완성형·단답형·서술형 미사용)
+    essay_expansion_encouraged: true  # 논술형 평가 확대 권장
+    neis_label_for_essay: 서답형        # 나이스 표기
+
+# -----------------------------------------------------------------------------
+# 4. 평가 유형별 관행
+#    target_* 값은 core/asa-rules.md 의 제도 규칙과 일치해야 한다(엔진이 교차검증).
+# -----------------------------------------------------------------------------
+assessment:
+  paper:
+    selected_response:
+      target_correct_rate: 0.66       # 목표 수준 MCP의 약 2/3가 정답
+    constructed_response:
+      target_full_mark_prob: 0.50     # 목표 수준 학생이 만점 받을 확률 50%
+  performance:
+    types:
+      - 논술
+      - 구술·발표
+      - 토의·토론
+      - 프로젝트
+      - 실험·실습
+      - 포트폴리오
+      - 기타
+    supplementary: [교사 관찰 및 기록, 자기평가, 동료평가]
+
+# -----------------------------------------------------------------------------
+# 5. 원자료 출처
+#    scripts/build_refs.py 가 subject/data/ 를 만들 때 참조한다.
+#    ★ 저작권 있는 원문은 저장소에 포함하지 않는다. 사용자가 로컬에 두고 빌드한다.
+#    ★ .hwp 를 정본으로, .pdf 를 교차검증용으로 쓴다.
+#      (PDF는 표가 페이지를 넘을 때 셀이 깨진다 — 공통 보급본 '읽기' 영역별 성취수준 E에서 확인)
+# -----------------------------------------------------------------------------
+sources:
+  standards:
+    - id: kice_common
+      title: 2022 개정 교육과정에 따른 고등학교 국어과 공통과목 성취수준
+      publisher: 한국교육과정평가원
+      year: 2024
+      primary: 6. 국어과 성취수준.hwp
+      crosscheck: 6. 국어과 성취수준.pdf
+      covers: [gongguk1, gongguk2]
+      contains: [standard_levels, area_levels, exemplar_items]
+
+    - id: kice_elective
+      title: 2022 개정 교육과정에 따른 고등학교 국어과 선택과목 성취수준 (현장 보급본)
+      publisher: 한국교육과정평가원
+      year: 2025
+      primary: 1. 국어과 선택과목 성취수준 현장 보급본.hwp
+      crosscheck: 1. 국어과 선택과목 성취수준 현장 보급본.pdf
+      covers: [hwaeon, dokjak, munhak, jutam, munyeong, jikui, dokto, maeui, eontam]
+      contains: [standard_levels, exemplar_items]
+
+  methodology:
+    - id: kice_common_report
+      title: 국어과 공통과목 성취수준 개발 연구 최종보고서
+      primary: 7. 국어과 공통과목 성취수준 개발 연구 최종보고서.pdf
+      use: 성취수준 개발 원리·판단 근거의 출처
+
+    - id: kice_elective_report
+      title: 2022 개정 교육과정에 따른 고등학교 국어과 선택과목 성취수준 개발 연구 최종보고서
+      primary: '1. 2022 개정 교육과정에 따른 고등학교 국어과 선택과목  성취수준 개발 연구 최종보고서(평가원용).pdf'
+      use: 성취수준 개발 원리·판단 근거의 출처
+
+  exemplars:
+    - id: gyeonggi_standardized
+      title: 2025 경기 성취평가 표준화 평가도구 (공통국어)
+      publisher: 경기도교육청
+      year: 2025
+      primary: 1_[공통국어] 2025 경기 성취평가 표준화 평가도구(예시).pdf
+      covers: [gongguk1, gongguk2]
+      contains: [item_cards, mcp_statements, performance_tasks, rubrics, cut_scores]
+      note: 성취수준별 A~E 표적 문항 세트의 정본. 난이도 레버 도출의 근거 자료.
+
+    - id: stas
+      title: KICE 학생평가지원포털
+      url: https://stas.moe.go.kr
+      auth: .env (STAS_USER_ID / STAS_PASSWORD)
+      fetch: scripts/stas_fetch.py
+      contains: [performance_tools, essay_tools, rubrics, formative_tools]
+
+# -----------------------------------------------------------------------------
+# 6. 교과 특수 문서 (이 디렉터리 안에 반드시 존재해야 함)
+# -----------------------------------------------------------------------------
+documents:
+  difficulty_levers: difficulty-levers.md   # 성취수준을 가르는 교과별 난이도 변수
+  item_conventions:  item-conventions.md    # 문항 형식·지문·발문 관행
+  misconceptions:    misconceptions.md      # 오답·오개념 패턴 (결과 분석용)
