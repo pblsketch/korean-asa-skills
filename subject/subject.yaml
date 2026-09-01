@@ -208,7 +208,9 @@ jurisdiction:
   source_year: null          # ★ 지침 연도. 해마다 개정되므로 반드시 확인해 적을 것
   rules:
     selected_response_choices: 5      # '선택형'은 오지선다로 출제
-    constructed_response_types: [논술형]  # '서답형'은 논술형만 사용 (완성형·단답형·서술형 미사용)
+    # ★ 시도마다 다르다. 국가 예시 평가도구에는 서술형·단답형·완성형도 들어 있으므로
+    #   여기 적힌 값을 교과 공통 사실로 읽으면 안 된다. 소속 시도 지침을 확인해 채울 것.
+    constructed_response_types: [논술형]  # 경기: '서답형'은 논술형만 사용
     essay_expansion_encouraged: true  # 논술형 평가 확대 권장
     neis_label_for_essay: 서답형        # 나이스 표기
 

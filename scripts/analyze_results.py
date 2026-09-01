@@ -8,6 +8,7 @@
     python scripts/analyze_results.py results.csv
     python scripts/analyze_results.py results.csv --json
     python scripts/analyze_results.py --template > results.csv
+    python scripts/analyze_results.py results.csv --dist "A:27,B:40,C:45,D:25,E:28,미도달:15" --common
 
 입력 CSV (헤더 필수, 인코딩 UTF-8)
     문항,성취기준,점검성취수준,예상난이도,배점,정답,응답1,응답2,응답3,응답4,응답5,무응답
@@ -148,6 +149,64 @@ def analyze(rows: list[dict]) -> dict:
     }
 
 
+def parse_distribution(spec: str) -> dict[str, int]:
+    """'A:27,B:40,C:45,D:25,E:28,미도달:15' → {'A':27, …}
+
+    ★ 집계값만 받는다. 학생별 점수나 명단은 받지 않는다.
+    미도달 인원 파악에는 집계로 충분하고, 명단은 교사가 나이스에서 본다.
+    """
+    out: dict[str, int] = {}
+    for part in spec.split(","):
+        if not part.strip():
+            continue
+        key, _, val = part.partition(":")
+        key = key.strip()
+        try:
+            out[key] = int(val.strip())
+        except ValueError:
+            sys.exit(f"--dist 형식 오류: {part!r}  (예: A:27,B:40,…,미도달:15)")
+    return out
+
+
+def render_distribution(dist: dict[str, int], is_common: bool) -> str:
+    """성취수준별 분포 → 최소 성취수준 보장지도 대상 규모."""
+    total = sum(dist.values())
+    if total == 0:
+        return ""
+    out = ["", "## 성취수준별 분포", "", "| 성취도 | 인원 | 비율 |", "|---|---|---|"]
+    for k, v in dist.items():
+        out.append(f"| {k} | {v}명 | {v / total * 100:.1f}% |")
+    out.append(f"| **계** | **{total}명** | 100.0% |")
+
+    under = dist.get("미도달", 0)
+    e_cnt = dist.get("E", 0)
+
+    out += ["", "### 최소 성취수준 대상", ""]
+    if is_common:
+        out += [
+            f"- **미도달 {under}명 ({under / total * 100:.1f}%)** — 성취율 40% 미만."
+            " 공통과목이므로 **최소 성취수준 보장지도 대상**이다 (`asa-guide` 작업 ④)",
+            f"- E {e_cnt}명 ({e_cnt / total * 100:.1f}%) — 이수하였으나 최소 성취수준 구간."
+            " 다음 학기 예방지도 후보로 볼 수 있다",
+        ]
+        if under == 0:
+            out.append("- 미도달이 0명이면 **분할점수 산정이 느슨했는지** 함께 본다 (R2)")
+    else:
+        out += [
+            "- **선택과목이므로 미도달 구분이 없다.** 2026학년도부터 학업 성취율 40% 기준이"
+            " 적용되지 않아 성취율로는 미이수가 되지 않는다 (`core/asa-rules.md` §8)",
+            f"- E {e_cnt}명 ({e_cnt / total * 100:.1f}%) — 성취율 60% 미만 구간",
+            "- **출석률 2/3 미달자는 추가학습 대상**이다. 그 명단은 별도로 확인한다",
+        ]
+    out += [
+        "",
+        "> 이 분포는 **학기 합산 성취율** 기준일 때만 이수 판정에 쓸 수 있다.",
+        "> 1차 지필 일부만으로 산출한 값이면 판정에 쓰지 말 것.",
+        "> 개별 학생 명단은 나이스에서 확인한다 — 이 도구는 집계값만 다룬다.",
+    ]
+    return "\n".join(out)
+
+
 def render(res: dict) -> str:
     out = ["# 평가 결과 수치 분석", ""]
 
@@ -211,6 +270,10 @@ def main() -> int:
     ap.add_argument("csv", nargs="?", help="문항 단위 집계 CSV")
     ap.add_argument("--json", action="store_true", help="JSON 출력")
     ap.add_argument("--template", action="store_true", help="입력 CSV 서식 출력")
+    ap.add_argument("--dist", metavar="SPEC",
+                    help="성취수준별 분포(집계값만) — 예: A:27,B:40,C:45,D:25,E:28,미도달:15")
+    ap.add_argument("--common", action="store_true",
+                    help="공통과목이다 (성취율 40%% 이수 기준 적용). 없으면 선택과목으로 본다")
     ap.add_argument("--from-items", metavar="JSON",
                     help="asa-item 이 만든 .work/items/*.json 으로 CSV 뼈대 생성 "
                          "(응답 인원만 채우면 된다)")
@@ -258,7 +321,16 @@ def main() -> int:
         return 1
 
     res = analyze(rows)
-    print(json.dumps(res, ensure_ascii=False, indent=2) if args.json else render(res))
+    dist = parse_distribution(args.dist) if args.dist else None
+    if dist:
+        res["distribution"] = dist
+
+    if args.json:
+        print(json.dumps(res, ensure_ascii=False, indent=2))
+    else:
+        print(render(res))
+        if dist:
+            print(render_distribution(dist, args.common))
     return 0
 
 

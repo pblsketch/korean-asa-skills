@@ -65,7 +65,14 @@ python scripts/analyze_results.py --from-items .work/items/<코드>.json > resul
 python scripts/analyze_results.py --template > results.csv
 
 python scripts/analyze_results.py results.csv       # 분석
+
+# 성취수준별 분포가 있으면 함께 넣는다 (5단계에서 쓴다)
+python scripts/analyze_results.py results.csv   --dist "A:27,B:40,C:45,D:25,E:28,미도달:15" --common
 ```
+
+> `--dist` 는 **집계값만** 받는다. 학생별 점수나 명단은 넣지 않는다.
+> 미도달 인원 파악에는 집계로 충분하고, 명단은 교사가 나이스에서 본다.
+> `--common` 을 붙이면 공통과목(성취율 40% 이수 기준 적용)으로, 없으면 선택과목으로 해석한다.
 
 직접 계산하지 말고 스크립트를 쓴다. 정답률·난이도 구간·갭·사문항 선지·수준 역전·66% 대비를 결정적으로 뽑아 준다.
 
@@ -145,8 +152,27 @@ python scripts/analyze_results.py results.csv       # 분석
 
 ### 7단계 — 출력
 
-한글 문서로 낸다. 페이로드 형태와 함정은 `skills/asa-item/SKILL.md` 7단계와 동일하다.
-키는 `operations`/`type`, 기존 파일은 `allow_overwrite: true`, **반드시 `ops_applied` 확인**.
+**결과 분석 보고서는 정해진 학교 양식이 대개 없다.** 이 저장소의 구성으로 만든다.
+다만 학교에 양식이 있다면 그것을 우선한다 — 먼저 묻는다.
+
+**출력 전에 `claw-hwp` 스킬 문서(`claw-hwp:hwp` 의 SKILL.md)를 먼저 읽는다.**
+핸들러 목록·인자·함정·검증법이 전부 거기 있다. 소스를 뜯지 말 것. 특히 이 절들을 본다.
+
+| 상황 | claw-hwp SKILL.md 의 해당 절 |
+|---|---|
+| 새 문서 생성 | "Create a new document" |
+| **양식 채우기** | **"Fill in this form / 서식 / 양식 / 템플릿"** — `set_cell_text_by_label`(.hwp) · `fill_template {{토큰}}`(.hwpx) · `replace_text` 함정 |
+| 기존 문서 편집 | "Edit this document" |
+| 함정 모음 | "Common pitfalls" |
+
+이 저장소에서 반드시 지킬 것만 다시 적는다.
+
+- 키는 `operations` / `type` 이다. `ops` / `op` 로 쓰면 `ops_applied: 0` 으로 **조용히 통과**한다
+- **`status: success` 만 보지 말고 `ops_applied` 를 확인한다.** 0이면 아무것도 안 들어갔다
+- ops 파일을 Python 으로 쓸 때는 `write_text(..., encoding="utf-8")`. `print` 리다이렉트는 Windows 에서 cp949 로 깨진다
+- 생성 후 `extract_text.js <파일> --format markdown` 으로 **역추출해 확인**한다
+- 편집은 **원본 포맷을 유지**한다 (`.hwp` ↔ `.hwpx` 변환하지 않는다)
+
 
 ---
 

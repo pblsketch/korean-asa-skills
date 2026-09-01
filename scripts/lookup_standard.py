@@ -49,6 +49,76 @@ def load_courses() -> dict[str, dict]:
     }
 
 
+def load_plans() -> list[dict]:
+    """`.work/plan/*.json` — asa-guide 가 남긴 인계 파일. 없으면 빈 목록."""
+    d = ROOT / ".work" / "plan"
+    out: list[dict] = []
+    for path in sorted(d.glob("*.json")) if d.is_dir() else []:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        payload["_path"] = str(path.relative_to(ROOT))
+        out.append(payload)
+    return out
+
+
+def plan_for(code: str, course_id: str, plans: list[dict]) -> dict | None:
+    """이 성취기준을 편성한 인계 파일. 여럿이면 가장 최근 학기."""
+    hits = [p for p in plans
+            if p.get("course_id") == course_id and code in (p.get("standards") or [])]
+    return max(hits, key=lambda p: str(p.get("semester", ""))) if hits else None
+
+
+def fmt_plan(code: str, area_name: str | None, plan: dict | None) -> list[str]:
+    """인계 정보 절. 인계 파일이 아예 없으면 아무것도 붙이지 않는다."""
+    if plan is None:
+        return []
+
+    out = ["", f"### 학기 평가계획 — {plan.get('semester', '?')}  `{plan['_path']}`"]
+
+    elements = (plan.get("elements") or {}).get(code)
+    if elements:
+        out += ["", "**평가 요소** (재도출하지 말고 그대로 쓸 것)", ""]
+        out += [f"- {e}" for e in elements]
+
+    # 최소 능력의 수행 특성 — 영역명 또는 성취기준 코드로 저장된다
+    minlv = plan.get("min_level") or {}
+    mine = minlv.get(code) or (minlv.get(area_name) if area_name else None)
+    if mine:
+        out += ["", "**최소 능력의 수행 특성** (Target PLD — 40% 지점)", ""]
+        out += [f"- {m}" for m in mine]
+
+    levels = plan.get("semester_levels") or {}
+    if levels:
+        out += ["", "**학기 단위 성취수준**", ""]
+        for lv in LEVELS:
+            entries = levels.get(lv) or []
+            if not entries:
+                continue
+            mine_e = [e for e in entries if area_name and e.get("label") == area_name]
+            others = [e for e in entries if e not in mine_e]
+            if mine_e:
+                out.append(f"- **{lv}** [{mine_e[0].get('label')}] {mine_e[0].get('text', '')}")
+                rest = " · ".join(f"{e.get('label')}: {e.get('summary') or '(요약 없음)'}"
+                                  for e in others)
+                if rest:
+                    out.append(f"  - 다른 영역 — {rest}")
+            else:
+                # 이 성취기준의 영역이 라벨에 없다 (3범주·역량 프레임 등) → 전부 요약으로
+                rest = " · ".join(f"{e.get('label')}: {e.get('summary') or e.get('text', '')[:60]}"
+                                  for e in entries)
+                out.append(f"- **{lv}** {rest}")
+
+        out += ["", "> 해당 라벨은 전문, 나머지는 요약입니다. 채점기준의 수행 수준을 이 진술과 연계하세요."]
+
+    plan_ratio = (plan.get("assessment_plan") or {}).get("서논술형_반영비율", "MISSING")
+    if plan_ratio is None:
+        out += ["", "> ⚠ 서·논술형 반영 비율이 비어 있습니다. 소속 시도 시행지침을 확인하세요."]
+
+    return out
+
+
 def load_exemplars() -> dict[str, list[dict]]:
     """성취기준 코드 → 국가 예시 평가도구 목록. 색인이 없으면 빈 dict."""
     path = SUBJECT_DIR / "data" / "exemplars" / "kice_eval_tools.json"
@@ -91,7 +161,8 @@ def fmt_exemplars(code: str, index: dict[str, list[dict]]) -> list[str]:
 
 
 def fmt_standard(std: dict, course: dict, conf: dict, with_area: bool, doc: dict,
-                 exemplars: dict[str, list[dict]] | None = None) -> str:
+                 exemplars: dict[str, list[dict]] | None = None,
+                 plans: list[dict] | None = None) -> str:
     meta = next((c for c in conf["courses"] if c["id"] == course["course_id"]), {})
     area_label = f" · {std['area_name']}" if std.get("area_name") else ""
 
@@ -144,6 +215,8 @@ def fmt_standard(std: dict, course: dict, conf: dict, with_area: bool, doc: dict
                 "> 없는 영역별 성취수준을 지어내지 마세요. (`core/level-writing.md` §1)",
             ]
 
+    out += fmt_plan(std["code"], std.get("area_name"),
+                    plan_for(std["code"], course["course_id"], plans or []))
     out += fmt_exemplars(std["code"], exemplars or {})
     return "\n".join(out)
 
@@ -216,6 +289,7 @@ def main() -> int:
 
     # ── 출력 ────────────────────────────────────────────────────────
     exemplars = load_exemplars()
+    plans = load_plans()
 
     if args.json:
         payload = []
@@ -229,6 +303,7 @@ def main() -> int:
                     None,
                 )
             item["exemplars"] = exemplars.get(s["code"], [])
+            item["plan"] = plan_for(s["code"], d["course_id"], plans)
             payload.append(item)
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
@@ -236,7 +311,7 @@ def main() -> int:
     for i, (d, s) in enumerate(picked):
         if i:
             print("\n---\n")
-        print(fmt_standard(s, d, conf, args.with_area, d, exemplars))
+        print(fmt_standard(s, d, conf, args.with_area, d, exemplars, plans))
     if len(picked) > 1:
         print(f"\n> 성취기준 {len(picked)}개")
     return 0
