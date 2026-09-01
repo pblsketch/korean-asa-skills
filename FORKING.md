@@ -93,11 +93,20 @@ python scripts/validate_subject.py
 
 ```bash
 # 교육부·KICE 성취수준 보급본을 로컬에 내려받아 둔 뒤
-python scripts/build_refs.py
+python scripts/build_refs.py        # 성취기준별·영역별 성취수준
+python scripts/build_exemplars.py   # 국가 예시 평가도구 색인
 python scripts/validate_subject.py
 ```
 
 빌드 결과는 `subject/data/`에 생성되며 `.gitignore` 처리되어 있다.
+
+`build_exemplars.py` 는 보급본의 **예시 평가도구 요약표**를 읽는다. 보급본이 과목별로
+`| 도구명-번호 | 영역 | [성취기준코드] | 유형 | 평가 요소 |` 형태의 표를 싣는 양식이면
+교과와 무관하게 그대로 동작한다. `sources.standards[].contains` 에 `exemplar_items` 를
+선언한 자료만 읽는다.
+
+유형 이름이 교과마다 다르면(예: 실험·실습 계열) `scripts/build_exemplars.py` 의
+`FAMILY` 표에 추가한다. 선다형 / 서답형 / 수행평가 세 갈래로 접어 넣는 대응표다.
 
 **자료 입수처**
 - 한국교육과정평가원 성취수준 보급본 — 교과별로 발간되어 있다

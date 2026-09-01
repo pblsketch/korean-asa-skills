@@ -262,6 +262,63 @@ def check_data(data: dict, rx: re.Pattern | None, courses: list[dict]) -> None:
             )
 
 
+def check_exemplars(courses: list[dict]) -> None:
+    """예시 평가도구 색인 — 있으면 성취기준 목록과 맞물리는지 본다. 없으면 안내만 한다."""
+    import json
+
+    path = SUBJECT_DIR / "data" / "exemplars" / "kice_eval_tools.json"
+    if not path.is_file():
+        warn(
+            "예시 평가도구 색인이 없습니다. `python scripts/build_exemplars.py` 로 만들면 "
+            "성취기준 조회 시 국가 개발 예시 문항 유무가 함께 나옵니다."
+        )
+        return
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        err(f"{path.name}: JSON 파싱 실패 — {exc}")
+        return
+
+    known_codes: set[str] = set()
+    std_dir = SUBJECT_DIR / "data" / "standards"
+    for f in std_dir.glob("*.json") if std_dir.is_dir() else []:
+        try:
+            known_codes.update(
+                s.get("code", "") for s in json.loads(f.read_text(encoding="utf-8")).get("standards", [])
+            )
+        except json.JSONDecodeError:
+            continue
+    if not known_codes:
+        return
+
+    course_ids = {c["id"] for c in courses if c.get("id")}
+    orphans, bad_course, covered = set(), set(), set()
+    for item in payload.get("items", []):
+        code = item.get("code", "")
+        if code in known_codes:
+            covered.add(code)
+        else:
+            orphans.add(code)
+        if item.get("course_id") not in course_ids:
+            bad_course.add(item.get("course_id"))
+
+    if orphans:
+        err(
+            f"{path.name}: 성취기준 목록에 없는 코드 {len(orphans)}개 — "
+            f"{', '.join(sorted(orphans)[:5])}. 두 데이터의 원자료 판이 다를 수 있습니다."
+        )
+    if bad_course:
+        err(f"{path.name}: subject.yaml 에 없는 course_id — {', '.join(sorted(map(str, bad_course)))}")
+
+    if not orphans and not bad_course:
+        pct = round(len(covered) / len(known_codes) * 100)
+        print(
+            f"  [정보] 예시 평가도구 {payload.get('count', 0)}건 · "
+            f"성취기준 {len(covered)}/{len(known_codes)}개({pct}%)에 연결됨"
+        )
+
+
 # ── 8. 엔진 순수성 — 교과 지식이 core/·skills/ 로 새지 않았는가 ──────────
 def check_engine_purity(data: dict, courses: list[dict]) -> None:
     terms: set[str] = set()
@@ -345,6 +402,7 @@ def main() -> int:
         check_assessment(data)
         check_documents(data)
         check_data(data, rx, courses)
+        check_exemplars(courses)
         check_engine_purity(data, courses)
 
     subj = (data or {}).get("subject") or {}

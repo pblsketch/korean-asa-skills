@@ -308,6 +308,7 @@ cd korean-asa-skills
 
 ```bash
 python scripts/build_refs.py        # 성취수준 추출
+python scripts/build_exemplars.py   # 국가 예시 평가도구 색인
 python scripts/validate_subject.py  # 제대로 됐는지 검사
 ```
 
@@ -322,6 +323,19 @@ python scripts/validate_subject.py  # 제대로 됐는지 검사
 …
 과목 11개, 성취기준 119개 → subject/data/standards
 ```
+
+`build_exemplars.py` 는 같은 자료에서 **국가 예시 평가도구 색인**을 만듭니다.
+
+```
+  서답형          78건
+  수행평가         40건
+  선다형          20건
+예시 평가도구 138개 → subject/data/exemplars/kice_eval_tools.json
+```
+
+이후 `lookup_standard.py` 로 성취기준을 조회하면 그 성취기준에 **국가 개발 예시 문항이 있는지**가
+함께 나옵니다. `asa-item` 은 이걸 먼저 확인하고, 있으면 새로 만들기 전에 알려 줍니다.
+색인이라 **문항 본문·채점기준은 담지 않습니다** — 실물은 보급본 원본에서 보셔야 합니다([NOTICE.md](NOTICE.md)).
 
 > `.hwp` 를 읽으려면 [claw-hwp](https://github.com/DoHyun468/claw-hwp) 플러그인이 필요합니다. 한컴오피스는 없어도 됩니다.
 

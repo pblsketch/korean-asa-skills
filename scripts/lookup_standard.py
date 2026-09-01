@@ -49,7 +49,49 @@ def load_courses() -> dict[str, dict]:
     }
 
 
-def fmt_standard(std: dict, course: dict, conf: dict, with_area: bool, doc: dict) -> str:
+def load_exemplars() -> dict[str, list[dict]]:
+    """성취기준 코드 → 국가 예시 평가도구 목록. 색인이 없으면 빈 dict."""
+    path = SUBJECT_DIR / "data" / "exemplars" / "kice_eval_tools.json"
+    if not path.is_file():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    out: dict[str, list[dict]] = {}
+    for item in payload.get("items", []):
+        out.setdefault(item.get("code", ""), []).append(item)
+    return out
+
+
+def fmt_exemplars(code: str, index: dict[str, list[dict]]) -> list[str]:
+    """국가 예시 평가도구 절. 색인 자체가 없으면 아무것도 붙이지 않는다."""
+    if not index:
+        return []
+    hits = index.get(code) or []
+    if not hits:
+        return [
+            "",
+            "### 국가 예시 평가도구 — **없음**",
+            "",
+            "> 이 성취기준에는 보급본의 예시 평가도구가 없습니다. 새로 개발해야 합니다.",
+        ]
+    out = [
+        "",
+        f"### 국가 예시 평가도구 {len(hits)}건",
+        "",
+        "| 번호 | 갈래 | 유형 | 평가 요소 |",
+        "|---|---|---|---|",
+    ]
+    for h in hits:
+        types = "·".join(h.get("tool_types") or [])
+        out.append(f"| {h['ref']} | **{h['family']}** | {types} | {h.get('element') or '-'} |")
+    out += ["", "> 색인만 담고 있습니다. **문항 본문과 채점기준은 보급본 원본**에서 확인하세요."]
+    return out
+
+
+def fmt_standard(std: dict, course: dict, conf: dict, with_area: bool, doc: dict,
+                 exemplars: dict[str, list[dict]] | None = None) -> str:
     meta = next((c for c in conf["courses"] if c["id"] == course["course_id"]), {})
     area_label = f" · {std['area_name']}" if std.get("area_name") else ""
 
@@ -95,12 +137,14 @@ def fmt_standard(std: dict, course: dict, conf: dict, with_area: bool, doc: dict
                 "### 영역별 성취수준 — **없음**",
                 "",
                 "> 이 과목에는 영역별 성취수준이 개발되어 있지 않습니다.",
-                "> 한국교육과정평가원은 공통과목에만 영역별 성취수준을 개발했고,",
-                "> 내용 영역이 구분되지 않은 선택과목은 영역 단위 자체가 없습니다.",
+                "> 기준은 과목 유형(공통/선택)이 아니라 **내용 영역 구분의 유무**입니다.",
+                "> 영역이 구분되지 않는 과목은 영역 단위 자체가 없습니다.",
                 ">",
                 "> **학기 단위 성취수준은 성취기준별 성취수준에서 직접 종합해야 합니다.**",
                 "> 없는 영역별 성취수준을 지어내지 마세요. (`core/level-writing.md` §1)",
             ]
+
+    out += fmt_exemplars(std["code"], exemplars or {})
     return "\n".join(out)
 
 
@@ -171,6 +215,8 @@ def main() -> int:
         return 2
 
     # ── 출력 ────────────────────────────────────────────────────────
+    exemplars = load_exemplars()
+
     if args.json:
         payload = []
         for d, s in picked:
@@ -182,6 +228,7 @@ def main() -> int:
                     (a for a in d.get("area_levels", []) if a.get("area") == s["area"]),
                     None,
                 )
+            item["exemplars"] = exemplars.get(s["code"], [])
             payload.append(item)
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
@@ -189,7 +236,7 @@ def main() -> int:
     for i, (d, s) in enumerate(picked):
         if i:
             print("\n---\n")
-        print(fmt_standard(s, d, conf, args.with_area, d))
+        print(fmt_standard(s, d, conf, args.with_area, d, exemplars))
     if len(picked) > 1:
         print(f"\n> 성취기준 {len(picked)}개")
     return 0
