@@ -26,6 +26,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -41,17 +42,29 @@ SUBSEC_RE = re.compile(r"^\((\d+)\)\s*(.+?)\s*$")                  # (1) 듣기�
 LEVELS = ("A", "B", "C", "D", "E")
 CATEGORIES = ("지식·이해", "과정·기능", "가치·태도")
 
+# 옛한글 자모 → 현대 자모. 이것만 바꿔 주면 NFC 가 음절로 합성한다.
+ARCHAIC_JAMO = str.maketrans({
+    "ᅌ": "ᄋ",     # ᅌ 옛이응(초성) → ᄋ
+    "ᇰ": "ᆼ",     # ᇰ 옛이응(종성) → ᆼ
+})
+# 합성되지 못하고 남은 한글 조합용 자모 (검증용)
+STRAY_JAMO_RE = re.compile(r"[ᄀ-ᇿꥠ-꥿ힰ-퟿]")
+
 
 def norm(text: str) -> str:
-    """가운뎃점 변형과 공백을 통일한다.
+    """가운뎃점 변형·공백·옛한글 자모를 통일한다.
 
     보급본은 같은 진술문을 자리에 따라 다르게 조판한다.
       · 가운뎃점을 ･(U+FF65) / ・ / ∙ / ㆍ(U+318D 아래아) / · 로 섞어 씀
       · 가운뎃점 주변 공백이 있기도 없기도 함 ('개인적 ･ 사회적' vs '개인적･사회적')
     한국어 조판에서 가운뎃점은 공백 없이 쓰므로 공백을 제거해 정본을 만든다.
+
+    조판에 옛이응(ᅌ) 같은 옛한글 자모가 섞이면 NFC 로도 합성되지 않아
+    '있ᅌᅳᆷ을'(= 있음을) 처럼 자모가 그대로 노출된다. 현대 자모로 바꾼 뒤 합성한다.
     """
     for variant in ("･", "・", "∙", "‧", "ㆍ"):
         text = text.replace(variant, "·")
+    text = unicodedata.normalize("NFC", text.translate(ARCHAIC_JAMO))
     text = text.replace("\xa0", " ")
     text = re.sub(r"\s+", " ", text)
     text = re.sub(r"\s*·\s*", "·", text)

@@ -211,6 +211,10 @@ def check_documents(data: dict) -> None:
 
 
 # ── 7. 빌드된 데이터 (있으면 검사) ───────────────────────────────────────
+# 합성되지 못하고 남은 한글 조합용 자모 (build_refs.py 와 동일 기준)
+STRAY_JAMO_RE = re.compile(r"[ᄀ-ᇿꥠ-꥿ힰ-퟿]")
+
+
 def check_data(data: dict, rx: re.Pattern | None, courses: list[dict]) -> None:
     std_dir = SUBJECT_DIR / "data" / "standards"
     files = sorted(std_dir.glob("*.json")) if std_dir.is_dir() else []
@@ -247,6 +251,15 @@ def check_data(data: dict, rx: re.Pattern | None, courses: list[dict]) -> None:
             for name, text in levels.items():
                 if not str(text).strip():
                     err(f"{path.name} {code}: 수준 {name} 진술문이 비어 있습니다.")
+
+        # 합성되지 못한 한글 조합용 자모 — 원본 조판의 옛한글이 그대로 남은 경우.
+        # 예: '있ᅌᅳᆷ을'(= 있음을). 출력물에 그대로 나가면 진술문이 깨져 보인다.
+        stray = STRAY_JAMO_RE.findall(path.read_text(encoding="utf-8"))
+        if stray:
+            err(
+                f"{path.name}: 합성되지 않은 한글 자모 {len(stray)}건 — "
+                "scripts/build_refs.py 의 ARCHAIC_JAMO 에 해당 자모를 추가하고 다시 빌드하세요."
+            )
 
 
 # ── 8. 엔진 순수성 — 교과 지식이 core/·skills/ 로 새지 않았는가 ──────────
