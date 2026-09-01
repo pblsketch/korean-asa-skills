@@ -59,9 +59,17 @@ jurisdiction:
   id: TODO
   name: TODO
   source: TODO
+  source_year: TODO          # 지침 연도. 해마다 개정된다
   rules:
     selected_response_choices: 5
     constructed_response_types: [TODO]
+
+  # ★ 반영 비율은 시도마다 다르고 해마다 바뀐다.
+  #   모르면 null 로 두어라. 스킬이 사용자에게 묻는다. 추측값을 넣지 말 것.
+  ratios:
+    performance_min_percent: null
+    essay_min_percent: null
+    note: 소속 시도교육청 학업성적관리 시행지침에서 확인할 것
 
 # -----------------------------------------------------------------------------
 # 4. 평가 유형별 관행
