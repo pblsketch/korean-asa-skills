@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성취평가 5단계 절차와 세 스킬</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #ece9e2;
+      --color-ink:    #1e2022;
+      --color-muted:  #6f7171;
+      --color-accent: #ad3827;
+      --font-sans:  'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', 'Noto Serif KR', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-muted); margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400; letter-spacing: -0.02em; line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .sub { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Process · 성취평가제</p>
+    <h1>준거를 세우고 · 문항을 만들고 · 결과를 되돌린다</h1>
+    <p class="sub">준거는 교수·학습 투입 전에 확정한다. 학기가 시작된 뒤에 만드는 성취수준은 준거가 아니라 사후 정당화다.</p>
+
+    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="asa-chain-title asa-chain-desc">
+      <title id="asa-chain-title">성취평가 5단계 절차와 세 스킬의 대응</title>
+      <desc id="asa-chain-desc">성취기준 분석, 준거 설정, 평가도구 개발, 분할점수, 결과 산출·보고 다섯 단계가 순서대로 이어지고 결과가 다음 학기로 되돌아가며, 각 단계에 asa-guide·asa-item·asa-analyze 스킬이 대응하는 그림.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6f7171"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ad3827"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#ece9e2"/>
+
+      <!-- 연결선 -->
+      <line x1="152" y1="168" x2="184" y2="168" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="304" y1="168" x2="336" y2="168" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="456" y1="168" x2="488" y2="168" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="608" y1="168" x2="640" y2="168" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 700,224 V 272 Q 700,280 692,280 H 100 Q 92,280 92,272 V 232" fill="none" stroke="#6f7171" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="364" y="288" width="72" height="16" rx="2" fill="#ece9e2"/>
+      <text x="400" y="300" fill="#6f7171" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">다음 학기</text>
+
+      <rect x="32" y="112" width="120" height="112" rx="6" fill="#ece9e2"/>
+      <rect x="32" y="112" width="120" height="112" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <rect x="44" y="124" width="76" height="12" rx="2" fill="transparent" stroke="#1e2022" stroke-opacity="0.4" stroke-width="0.8"/>
+      <text x="82" y="133" fill="#1e2022" fill-opacity="0.8" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ASA-GUIDE</text>
+      <text x="44" y="164" fill="#1e2022" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">① 성취기준 분석</text>
+      <text x="44" y="188" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">평가 요소 도출</text>
+
+      <rect x="184" y="112" width="120" height="112" rx="6" fill="#ece9e2"/>
+      <rect x="184" y="112" width="120" height="112" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <rect x="196" y="124" width="76" height="12" rx="2" fill="transparent" stroke="#ad3827" stroke-opacity="0.4" stroke-width="0.8"/>
+      <text x="234" y="133" fill="#ad3827" fill-opacity="0.8" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ASA-GUIDE</text>
+      <text x="196" y="164" fill="#1e2022" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">② 준거 설정</text>
+      <text x="196" y="188" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">학기 단위 성취수준</text>
+      <text x="196" y="208" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">최소 성취수준</text>
+
+      <rect x="336" y="112" width="120" height="112" rx="6" fill="#ece9e2"/>
+      <rect x="336" y="112" width="120" height="112" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <rect x="348" y="124" width="76" height="12" rx="2" fill="transparent" stroke="#1e2022" stroke-opacity="0.4" stroke-width="0.8"/>
+      <text x="386" y="133" fill="#1e2022" fill-opacity="0.8" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ASA-ITEM</text>
+      <text x="348" y="164" fill="#1e2022" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">③ 평가도구 개발</text>
+      <text x="348" y="188" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">문항 · 채점기준</text>
+      <text x="348" y="208" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">문항정보표</text>
+
+      <rect x="488" y="112" width="120" height="112" rx="6" fill="#ece9e2"/>
+      <rect x="488" y="112" width="120" height="112" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <rect x="500" y="124" width="76" height="12" rx="2" fill="transparent" stroke="#1e2022" stroke-opacity="0.4" stroke-width="0.8"/>
+      <text x="538" y="133" fill="#1e2022" fill-opacity="0.8" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ASA-GUIDE</text>
+      <text x="500" y="164" fill="#1e2022" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">④ 분할점수</text>
+      <text x="500" y="188" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">평가 시행 전 공지</text>
+
+      <rect x="640" y="112" width="120" height="112" rx="6" fill="#ece9e2"/>
+      <rect x="640" y="112" width="120" height="112" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <rect x="652" y="124" width="76" height="12" rx="2" fill="transparent" stroke="#ad3827" stroke-opacity="0.4" stroke-width="0.8"/>
+      <text x="690" y="133" fill="#ad3827" fill-opacity="0.8" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ASA-ANALYZE</text>
+      <text x="652" y="164" fill="#1e2022" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">⑤ 결과 산출·보고</text>
+      <text x="652" y="188" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">분석 · 피드백</text>
+
+      <line x1="40" y1="344" x2="760" y2="344" stroke="rgba(30,32,34,0.10)" stroke-width="0.8"/>
+      <text x="40" y="364" fill="#6f7171" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+      <rect x="120" y="354" width="16" height="12" rx="2" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="164" y="364" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">준거를 세우고 되돌리는 자리</text>
+      <line x1="424" y1="360" x2="456" y2="360" stroke="#6f7171" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="468" y="364" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">고리를 닫는 경로</text>
+    </svg>
+  </div>
+</body>
+</html>

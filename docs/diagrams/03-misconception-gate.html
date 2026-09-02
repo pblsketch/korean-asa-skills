@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오개념 배제 절차</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #ece9e2;
+      --color-ink:    #1e2022;
+      --color-muted:  #6f7171;
+      --color-accent: #ad3827;
+      --font-sans:  'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', 'Noto Serif KR', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-muted); margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400; letter-spacing: -0.02em; line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .sub { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Flowchart · 성취평가제</p>
+    <h1>정답률이 낮다고 모두 오개념이 아니다</h1>
+    <p class="sub">넷을 먼저 배제한 뒤에야 가설을 세운다. 답지반응 분포는 가설을 좁힐 뿐이므로 결론은 늘 열어 둔다.</p>
+
+    <svg viewBox="0 0 800 344" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="asa-gate-title asa-gate-desc">
+      <title id="asa-gate-title">오개념 추론 전 네 가지 배제 절차</title>
+      <desc id="asa-gate-desc">정답률이 낮은 문항에 대해 문항 결함, 변별도 저해 선지, 미학습, 시험 운영 요인을 먼저 배제하고, 넷 다 아닐 때만 오개념 가설을 세우되 상담이나 후속 형성평가로 확인해야 함을 나타낸 흐름도.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6f7171"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ad3827"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#ece9e2"/>
+
+      <!-- 연결선 -->
+      <line x1="200" y1="172" x2="272" y2="172" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="472" y1="124" x2="576" y2="124" stroke="#ad3827" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+      <line x1="668" y1="160" x2="668" y2="192" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="480" y="100" width="88" height="16" rx="2" fill="#ece9e2"/>
+      <text x="524" y="112" fill="#6f7171" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">넷 다 아니면</text>
+
+      <rect x="40" y="136" width="160" height="72" rx="6" fill="#ece9e2"/>
+      <rect x="40" y="136" width="160" height="72" rx="6" fill="rgba(30,32,34,0.05)" stroke="#6f7171" stroke-width="1"/>
+      <text x="64" y="168" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">정답률이 낮다</text>
+      <text x="64" y="192" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">오개념이라 부르기 전에</text>
+      <rect x="272" y="88" width="200" height="168" rx="6" fill="#ece9e2"/>
+      <rect x="272" y="88" width="200" height="168" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <text x="296" y="120" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">먼저 배제한다</text>
+      <text x="296" y="144" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">① 문항 결함</text>
+      <text x="296" y="164" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">② 변별도 저해 선지</text>
+      <text x="296" y="184" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">③ 미학습</text>
+      <text x="296" y="204" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">④ 시험 운영 요인</text>
+      <rect x="576" y="88" width="184" height="72" rx="6" fill="#ece9e2"/>
+      <rect x="576" y="88" width="184" height="72" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="600" y="120" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">오개념 가설</text>
+      <text x="600" y="144" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">패턴 목록에서 좁힌다</text>
+      <rect x="576" y="192" width="184" height="64" rx="6" fill="#ece9e2"/>
+      <rect x="576" y="192" width="184" height="64" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="600" y="224" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">확인이 필요하다</text>
+      <text x="600" y="248" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">상담 · 후속 형성평가</text>
+
+      <line x1="40" y1="300" x2="760" y2="300" stroke="rgba(30,32,34,0.10)" stroke-width="0.8"/>
+      <text x="40" y="320" fill="#6f7171" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+      <rect x="120" y="310" width="16" height="12" rx="2" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="164" y="320" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">단정하지 않는 지점</text>
+    </svg>
+  </div>
+</body>
+</html>

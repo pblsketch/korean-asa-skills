@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성취평가 결과 분석 — 되먹임 구조</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #ece9e2;
+      --color-ink:    #1e2022;
+      --color-muted:  #6f7171;
+      --color-accent: #ad3827;
+      --font-sans:  'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', 'Noto Serif KR', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-muted); margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400; letter-spacing: -0.02em; line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .sub { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Loop · 성취평가제</p>
+    <h1>결과 분석은 성적 산출이 아니라 되먹임이다</h1>
+    <p class="sub">평가 결과를 준거에 다시 비추어 네 곳으로 되돌린다. 그중 둘은 다음 학기·다음 회차로 고리를 닫는다.</p>
+
+    <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="asa-loop-title asa-loop-desc">
+      <title id="asa-loop-title">성취평가 결과 분석의 되먹임 구조</title>
+      <desc id="asa-loop-desc">평가 결과 분석이 학생 피드백, 최소 성취수준 보장지도, 교수·학습 개선, 다음 평가도구 개선 네 곳으로 갈라지고, 뒤의 둘은 다음 학기 준거와 평가도구로 되돌아가 고리를 닫는 구조.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6f7171"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ad3827"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#ece9e2"/>
+
+      <!-- ─── 연결선 (박스보다 먼저) ─── -->
+      <!-- 결과 분석 → 학생 -->
+      <path d="M 220,244 H 244 Q 252,244 252,236 V 88 Q 252,80 260,80 H 380" fill="none" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <!-- 결과 분석 → 미도달 학생 (accent) -->
+      <path d="M 220,264 H 280 Q 288,264 288,256 V 192 Q 288,184 296,184 H 380" fill="none" stroke="#ad3827" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+      <!-- 결과 분석 → 수업 -->
+      <path d="M 220,284 H 336 Q 344,284 344,292 V 312 Q 344,320 352,320 H 380" fill="none" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <!-- 결과 분석 → 다음 평가도구 -->
+      <path d="M 220,304 H 300 Q 308,304 308,312 V 416 Q 308,424 316,424 H 380" fill="none" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <!-- 수업 ⇢ 다음 학기 (되돌림) -->
+      <path d="M 380,336 H 272 Q 264,336 264,344 V 464 Q 264,472 256,472 H 220" fill="none" stroke="#6f7171" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <!-- 평가도구 ⇢ 다음 회차 (되돌림) -->
+      <path d="M 380,444 H 304 Q 296,444 296,452 V 480 Q 296,488 288,488 H 220" fill="none" stroke="#6f7171" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <!-- ─── 노드 ─── -->
+      <!-- 결과 분석 (초점) -->
+      <rect x="40" y="224" width="180" height="96" rx="6" fill="#ece9e2"/>
+      <rect x="40" y="224" width="180" height="96" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="130" y="264" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">평가 결과 분석</text>
+      <text x="130" y="288" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">정답률 · 답지반응 분포</text>
+      <text x="130" y="308" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">성취수준별 분포</text>
+
+      <!-- 학생 -->
+      <rect x="380" y="48" width="260" height="64" rx="6" fill="#ece9e2"/>
+      <rect x="380" y="48" width="260" height="64" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <text x="404" y="76" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">학생</text>
+      <text x="404" y="98" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">성취수준별 피드백 · 학습 방향 안내</text>
+
+      <!-- 미도달 학생 (초점 2) -->
+      <rect x="380" y="152" width="260" height="64" rx="6" fill="#ece9e2"/>
+      <rect x="380" y="152" width="260" height="64" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="404" y="180" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">미도달 학생</text>
+      <text x="404" y="202" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">최소 성취수준 보장지도 · 예방 · 보충</text>
+
+      <!-- 수업 -->
+      <rect x="380" y="288" width="260" height="64" rx="6" fill="#ece9e2"/>
+      <rect x="380" y="288" width="260" height="64" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <text x="404" y="316" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">수업</text>
+      <text x="404" y="338" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">오개념 대응 · 못 다룬 성취기준 보완</text>
+
+      <!-- 다음 평가도구 -->
+      <rect x="380" y="392" width="260" height="64" rx="6" fill="#ece9e2"/>
+      <rect x="380" y="392" width="260" height="64" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <text x="404" y="420" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">다음 평가도구</text>
+      <text x="404" y="442" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">갭 문항 수정 · 난이도 추정 보정</text>
+
+      <!-- 다음 학기 준거 (고리를 닫는 자리) -->
+      <rect x="40" y="440" width="180" height="64" rx="6" fill="#ece9e2"/>
+      <rect x="40" y="440" width="180" height="64" rx="6" fill="rgba(30,32,34,0.05)" stroke="#6f7171" stroke-width="1"/>
+      <text x="130" y="468" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">다음 학기 준거</text>
+      <text x="130" y="490" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif" text-anchor="middle">다음 회차 평가도구</text>
+
+      <!-- ─── 범례 ─── -->
+      <line x1="40" y1="544" x2="760" y2="544" stroke="rgba(30,32,34,0.10)" stroke-width="0.8"/>
+      <text x="40" y="564" fill="#6f7171" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+
+      <rect x="120" y="554" width="16" height="12" rx="2" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="144" y="564" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">초점</text>
+
+      <line x1="220" y1="560" x2="252" y2="560" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="264" y="564" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">되돌리는 곳</text>
+
+      <line x1="384" y1="560" x2="416" y2="560" stroke="#6f7171" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="428" y="564" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">고리를 닫는 경로</text>
+    </svg>
+  </div>
+</body>
+</html>

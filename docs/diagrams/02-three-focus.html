@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3-Focus 분석 틀</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #ece9e2;
+      --color-ink:    #1e2022;
+      --color-muted:  #6f7171;
+      --color-accent: #ad3827;
+      --font-sans:  'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', 'Noto Serif KR', serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-muted); margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400; letter-spacing: -0.02em; line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .sub { font-size: 0.9rem; color: var(--color-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Fan-out · 성취평가제</p>
+    <h1>결과를 세 초점으로 나누어 본다</h1>
+    <p class="sub">교과협의회에서 이 질문들로 토의하라는 것이 지침이다. 세 번째가 성취평가제 고유이며, 출제 전에 예상 난이도를 적어 두지 않으면 성립하지 않는다.</p>
+
+    <svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="asa-focus-title asa-focus-desc">
+      <title id="asa-focus-title">평가 결과 분석의 세 가지 초점</title>
+      <desc id="asa-focus-desc">평가 결과를 전반적 성취의 정도, 집단별·수준별 성취, 예상과 실제의 차이 세 초점으로 나누어 분석하며 각 초점의 질문과 방법을 제시한 그림.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6f7171"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ad3827"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#ece9e2"/>
+
+      <!-- 연결선 -->
+      <path d="M 200,196 H 240 Q 248,196 248,188 V 100 Q 248,92 256,92 H 320" fill="none" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="200" y1="220" x2="320" y2="220" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 200,244 H 264 Q 272,244 272,252 V 340 Q 272,348 280,348 H 320" fill="none" stroke="#ad3827" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+
+      <rect x="40" y="176" width="160" height="88" rx="6" fill="#ece9e2"/>
+      <rect x="40" y="176" width="160" height="88" rx="6" fill="rgba(30,32,34,0.05)" stroke="#6f7171" stroke-width="1"/>
+      <text x="64" y="208" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">평가 결과</text>
+      <text x="64" y="232" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">문항정보표</text>
+      <text x="64" y="252" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">답지반응 분포</text>
+      <rect x="320" y="48" width="440" height="88" rx="6" fill="#ece9e2"/>
+      <rect x="320" y="48" width="440" height="88" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <text x="344" y="80" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">전반적 성취의 정도</text>
+      <text x="344" y="104" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">기대한 성취수준에 도달했는가 · 특이한 집단이 있는가</text>
+      <text x="344" y="124" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">→ 학급별 평균 · 성취수준별 분포 비율</text>
+      <rect x="320" y="176" width="440" height="88" rx="6" fill="#ece9e2"/>
+      <rect x="320" y="176" width="440" height="88" rx="6" fill="#ffffff" stroke="#1e2022" stroke-width="1"/>
+      <text x="344" y="208" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">집단별 · 수준별 성취</text>
+      <text x="344" y="232" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">집단 간 차이가 있는가 · 수준별 이해도 차이는</text>
+      <text x="344" y="252" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">→ 집단별 평균 비교 · 성취수준별 평균 비교</text>
+      <rect x="320" y="304" width="440" height="88" rx="6" fill="#ece9e2"/>
+      <rect x="320" y="304" width="440" height="88" rx="6" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="344" y="336" fill="#1e2022" font-size="16" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">예상과 실제의 차이</text>
+      <text x="344" y="360" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">지나치게 쉽거나 어려웠던 문항은 · 의도 밖 답지반응은</text>
+      <text x="344" y="380" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">→ 예상 난이도 ↔ 실제 정답률 · 답안별 응답 인원</text>
+
+      <line x1="40" y1="436" x2="760" y2="436" stroke="rgba(30,32,34,0.10)" stroke-width="0.8"/>
+      <text x="40" y="456" fill="#6f7171" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+      <rect x="120" y="446" width="16" height="12" rx="2" fill="rgba(173,56,39,0.08)" stroke="#ad3827" stroke-width="1"/>
+      <text x="164" y="456" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">성취평가 고유</text>
+      <line x1="310" y1="452" x2="342" y2="452" stroke="#6f7171" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="354" y="456" fill="#6f7171" font-size="12" font-family="'Geist', 'Noto Sans KR', 'Malgun Gothic', sans-serif">분석 초점</text>
+    </svg>
+  </div>
+</body>
+</html>
